@@ -1,0 +1,108 @@
+<div class="home-page">
+
+  <section class="hero">
+    <h1>Welcome to MyCanvas</h1>
+    <p>Build your weekly academic planner by adding your classes and assigning each one a color.</p>
+  </section>
+
+  <section class="course-form">
+    <h2>Add a Class</h2>
+
+    <input
+      type="text"
+      placeholder="e.g. INFOTC 4630"
+      [(ngModel)]="newCourse.code"
+    >
+
+    <input
+      type="text"
+      placeholder="e.g. Web Dev II"
+      [(ngModel)]="newCourse.name"
+    >
+
+    <div class="color-picker">
+
+    <button
+        type="button"
+        class="color-toggle-btn"
+        (click)="showColors = !showColors"
+    >
+        Select a Color
+    </button>
+
+    <div
+        class="color-options"
+        *ngIf="showColors"
+    >
+
+        <div
+        class="color-circle"
+        *ngFor="let color of availableColors"
+        [style.backgroundColor]="color"
+        [class.selected]="newCourse.color === color"
+        (click)="newCourse.color = color"
+        >
+        </div>
+
+    </div>
+
+    </div>
+
+    <button (click)="addCourse()">Add Class</button>
+  </section>
+
+  <section class="course-list">
+    <h2>Your Classes</h2>
+
+    <div class="course-grid">
+
+      <div
+        class="course-card"
+        *ngFor="let course of courses"
+        [style.border-left-color]="course.color"
+      >
+        <div>
+          <h3>{{ course.code }}</h3>
+          <p>{{ course.name }}</p>
+        </div>
+
+        <button
+          class="delete-btn"
+          (click)="deleteCourse(course._id!)"
+        >
+          ×
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="stats-section">
+  <h2>Quick Stats</h2>
+
+  <div class="stats-grid">
+
+    <div class="stat-card">
+      <h3>{{ getTotalAssignments() }}</h3>
+      <p>Total Assignments</p>
+    </div>
+
+    <div class="stat-card completed-stat">
+      <h3>{{ getCompletedAssignments() }}</h3>
+      <p>Completed</p>
+    </div>
+
+    <div class="stat-card overdue-stat">
+      <h3>{{ getOverdueAssignments() }}</h3>
+      <p>Overdue</p>
+    </div>
+
+    <div class="stat-card week-stat">
+      <h3>{{ getAssignmentsDueThisWeek() }}</h3>
+      <p>Due This Week</p>
+    </div>
+
+  </div>
+</section>
+
+</div>

@@ -1,0 +1,149 @@
+<div class="form-container">
+  <h2>Add Assignment</h2>
+
+  <select [(ngModel)]="newAssignment.course">
+    <option value="">Select Course</option>
+
+    <option
+      *ngFor="let course of courses"
+      [value]="course.name"
+    >
+      {{ course.name }}
+    </option>
+  </select>
+
+  <input
+    type="text"
+    placeholder="Assignment Title"
+    [(ngModel)]="newAssignment.title"
+  >
+
+  <input
+    type="date"
+    [(ngModel)]="newAssignment.dueDate"
+  >
+
+  <input
+    type="time"
+    [(ngModel)]="newAssignment.dueTime"
+  >
+
+  <button (click)="addAssignment()">
+    Add Assignment
+  </button>
+</div>
+
+<div class="calendar-navigation">
+  <button (click)="previousWeek()">
+    ← Previous Week
+  </button>
+
+  <h2>Weekly Planner</h2>
+
+  <button (click)="nextWeek()">
+    Next Week →
+  </button>
+</div>
+
+<div class="calendar-container">
+    <div
+        class="day-column"
+        *ngFor="let day of weekDays"
+        [class.today-column]="isToday(day.dateString)"
+    >
+    <div class="day-header">
+      <span
+        class="today-badge"
+        *ngIf="isToday(day.dateString)"
+      >
+        Today
+      </span>
+      <h3>{{ day.name }}</h3>
+      <p>{{ day.date | date:'MMM d' }}</p>
+    </div>
+
+    <div
+      class="calendar-card"
+      *ngFor="let assignment of getAssignmentsForDay(day.dateString)"
+      [style.border-left-color]="getCourseColor(assignment.course)"
+      [class.completed-card]="assignment.status === 'Complete'"
+      [class.overdue-card]="isOverdue(assignment)"
+    >
+<div class="card-actions">
+  <button
+    class="menu-dot-btn"
+    (click)="toggleMenu(assignment._id!)"
+    title="Options"
+  >
+    ⋮
+  </button>
+
+  <div
+    class="card-dropdown"
+    *ngIf="activeMenuId === assignment._id"
+  >
+    <button
+      class="dropdown-action"
+      (click)="toggleComplete(assignment)"
+    >
+      <span
+        [class.undo-icon]="assignment.status === 'Complete'"
+        [class.complete-icon]="assignment.status !== 'Complete'"
+      >
+        {{ assignment.status === 'Complete' ? '↺' : '✔' }}
+      </span>
+
+      {{ assignment.status === 'Complete' ? 'Undo' : 'Complete' }}
+    </button>
+
+    <button
+      class="dropdown-action"
+      (click)="startEditingDate(assignment); activeMenuId = null"
+    >
+      <span class="edit-icon">✎</span>
+      Edit Date
+    </button>
+
+    <button
+      class="dropdown-action"
+      (click)="deleteAssignment(assignment._id!)"
+    >
+      <span class="delete-icon">✖</span>
+      Delete
+    </button>
+  </div>
+</div>
+
+      <h4>{{ assignment.title }}</h4>
+
+      <p>{{ assignment.course }}</p>
+
+      <div
+        class="edit-date-box"
+        *ngIf="editingAssignmentId === assignment._id"
+      >
+        <input
+          type="date"
+          [(ngModel)]="editedDueDate"
+        >
+
+        <div class="edit-date-actions">
+          <button (click)="saveEditedDate(assignment)">
+            Save
+          </button>
+
+          <button
+            class="cancel-edit-btn"
+            (click)="cancelEditingDate()"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+
+      <p class="due-time">
+        Due: {{ formatTime(assignment.dueTime) }}
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<div class="import-page">
+
+  <h1>Canvas Import</h1>
+
+  <p>
+    Enter your Canvas API token to import assignments.
+  </p>
+
+  <input
+    type="text"
+    placeholder="Canvas API Token"
+    [(ngModel)]="token"
+  >
+
+  <button (click)="importAssignments()">
+    Import Assignments
+  </button>
+
+  <p class="success-message">
+    {{ successMessage }}
+  </p>
+
+</div>
